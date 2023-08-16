@@ -84,7 +84,7 @@ public class Configuration extends YamlConfiguration {
     }
 
     @NotNull
-    public List<String> getColoredList(String path, @NotNull HashMap<String, String> placeholders) {
+    public List<String> getColoredList(String path, @Nullable HashMap<String, String> placeholders) {
         List<String> list = new ArrayList<>();
         getColoredList(path).forEach(text -> {
             list.add(PlaceholderReplacer.replace(text, placeholders));
@@ -104,7 +104,7 @@ public class Configuration extends YamlConfiguration {
     }
 
     @NotNull
-    public List<Component> getComponentList(String path, HashMap<String, String> placeholders) {
+    public List<Component> getComponentList(String path, @Nullable HashMap<String, String> placeholders) {
         List<Component> componentList = new ArrayList<>();
         getColoredList(path).forEach(text -> {
             componentList.add(ComponentTranslator.toComponent(PlaceholderReplacer.replace(text, placeholders)));
@@ -142,18 +142,18 @@ public class Configuration extends YamlConfiguration {
     }
 
     @Nullable
-    public Title getTitle(String titlePath, String subtitlePath) {
-        Component title = getComponent(titlePath);
-        Component subtitle = getComponent(subtitlePath);
+    public Title getTitle(String titlePath, String subtitlePath, @Nullable HashMap<String, String> placeholders) {
+        Component title = getComponent(titlePath, placeholders);
+        Component subtitle = getComponent(subtitlePath, placeholders);
         if (title == null || subtitle == null) return null;
 
         return Title.title(title, subtitle);
     }
 
     @Nullable
-    public Title getTitle(String titlePath, String subtitlePath, String fadeInPath, String stayPath, String fadeOutPath) {
-        Component title = getComponent(titlePath);
-        Component subtitle = getComponent(subtitlePath);
+    public Title getTitle(String titlePath, String subtitlePath, String fadeInPath, String stayPath, String fadeOutPath, @Nullable HashMap<String, String> placeholders) {
+        Component title = getComponent(titlePath, placeholders);
+        Component subtitle = getComponent(subtitlePath, placeholders);
         if (title == null || subtitle == null) return null;
 
         Duration fadeIn = Duration.ofMillis(getInt(fadeInPath));
