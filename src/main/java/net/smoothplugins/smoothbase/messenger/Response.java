@@ -12,7 +12,6 @@ public interface Response {
     /**
      * Called when the response is not received in the specified timeout
      * @param channel
-     * @param response
      */
-    void onFail(String channel, Object response);
+    void onFail(String channel);
 }
