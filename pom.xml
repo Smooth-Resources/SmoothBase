@@ -33,5 +33,11 @@
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.14.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.12.14</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
