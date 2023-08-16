@@ -39,5 +39,11 @@
             <version>3.12.14</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>5.0.0-beta2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
