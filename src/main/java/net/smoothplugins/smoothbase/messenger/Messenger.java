@@ -1,29 +1,33 @@
 package net.smoothplugins.smoothbase.messenger;
 
+import java.util.UUID;
+
 public interface Messenger {
 
     /**
      * Send a message to a channel, without expecting a response
      * @param channel
-     * @param message
+     * @param JSON
      */
-    void send(String channel, Object message);
+    void send(String channel, String JSON);
 
     /**
      * Send a message to a channel, expecting a response.
      * @param channel
-     * @param message
+     * @param JSON
      * @param response
      * @param timeout
      */
-    void sendWithResponse(String channel, Object message, Response response, long timeout);
+    void sendRequest(String channel, String JSON, Response response, long timeout);
+
+    void sendResponse(String channel, String JSON, UUID identifier);
 
     /**
      * Called when a message is received.
      * @param channel
      * @param message
      */
-    void onMessage(String channel, Object message);
+    void onMessage(String channel, Message message);
 
     void register();
 
