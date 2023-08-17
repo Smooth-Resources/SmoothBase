@@ -2,6 +2,8 @@ package net.smoothplugins.smoothbase.storage;
 
 import net.smoothplugins.smoothbase.connection.RedisConnection;
 import net.smoothplugins.smoothbase.serializer.Serializer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
@@ -51,6 +53,7 @@ public class RedisStorage<K, V> {
         }
     }
 
+    @Nullable
     public V get(K key) {
         try (Jedis jedis = connection.getPool().getResource()) {
             return serializer.deserialize(jedis.get(prefix + key.toString()), valueClass);
@@ -63,6 +66,7 @@ public class RedisStorage<K, V> {
         }
     }
 
+    @NotNull
     public List<V> getAllValues() {
         try (Jedis jedis = connection.getPool().getResource()) {
             ScanParams scanParams = new ScanParams().match(prefix + "*");

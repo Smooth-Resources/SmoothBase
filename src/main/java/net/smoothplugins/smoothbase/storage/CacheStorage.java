@@ -1,5 +1,8 @@
 package net.smoothplugins.smoothbase.storage;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class CacheStorage<K, V> {
         return cache.containsKey(key);
     }
 
+    @Nullable
     public V get(K key) {
         return cache.get(key);
     }
@@ -35,10 +39,12 @@ public class CacheStorage<K, V> {
         cache.clear();
     }
 
+    @NotNull
     public List<K> getAllKeys() {
         return cache.keySet().stream().toList();
     }
 
+    @NotNull
     public List<V> getAllValues() {
         return cache.values().stream().toList();
     }
