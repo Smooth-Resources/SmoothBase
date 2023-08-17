@@ -20,6 +20,12 @@ public interface Messenger {
      */
     void sendRequest(String channel, String JSON, Response response, long timeout);
 
+    /**
+     * Send a response to a request.
+     * @param channel
+     * @param JSON
+     * @param identifier
+     */
     void sendResponse(String channel, String JSON, UUID identifier);
 
     /**

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class Message {
+
     private final MessageType type;
     private final UUID identifier;
     private final Object message;
