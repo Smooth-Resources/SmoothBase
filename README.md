@@ -7,6 +7,7 @@ Simple base to reduce boilerplate code.
 - Clone the repository with `git clone https://github.com/Smooth-Plugins/SmoothBase.git`
 - Compile it with Maven using `mvn clean install`
 
+- Maven
 ```xml
 <dependencies>
     <dependency>
