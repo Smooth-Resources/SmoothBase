@@ -2,7 +2,6 @@ package net.smoothplugins.smoothbase.storage;
 
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
-import net.smoothplugins.smoothbase.serializer.Serializer;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,67 +9,49 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MongoStorage<K, V> {
+public class MongoStorage {
 
     private final MongoCollection<Document> collection;
-    private final Serializer serializer;
-    private final Class<K> keyClass;
-    private final Class<V> valueClass;
 
-    public MongoStorage(MongoCollection<Document> collection, Serializer serializer, Class<K> keyClass, Class<V> valueClass) {
+    public MongoStorage(MongoCollection<Document> collection) {
         this.collection = collection;
-        this.serializer = serializer;
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
     }
 
-    public void create(V value) {
-        collection.insertOne(Document.parse(serializer.serialize(value)));
+    public void create(String JSON) {
+        collection.insertOne(Document.parse(JSON));
     }
 
-    public void update(K key, V value){
-        collection.replaceOne(new Document(key.toString(), "_id"), Document.parse(serializer.serialize(value)));
+    public void update(String key, String objective, String value){
+        collection.replaceOne(new Document(key, objective), Document.parse(value));
     }
 
-    public boolean contains(K key) {
-        return collection.find(new Document(key.toString(), "_id")).first() != null;
+    public boolean contains(String key, String objective) {
+        return collection.find(new Document(key, objective)).first() != null;
     }
 
     @Nullable
-    public V get(K key) {
-        Document result = collection.find(new Document(key.toString(), "_id")).first();
+    public String get(String key, String objective) {
+        Document result = collection.find(new Document(key, objective)).first();
         if (result != null) {
-            return serializer.deserialize(result.toJson(), valueClass);
+            return result.toJson();
         }
 
         return null;
     }
 
-    public void delete(K key) {
-        collection.deleteOne(new Document(key.toString(), "_id"));
+    public void delete(String key, String objective) {
+        collection.deleteOne(new Document(key, objective));
     }
 
     @NotNull
-    public List<V> getAllValues() {
-        List<V> list = new ArrayList<>();
-        collection.find().forEach((Block<Document>) document -> list.add(serializer.deserialize(document.toJson(), valueClass)));
+    public List<String> getAllValues() {
+        List<String> list = new ArrayList<>();
+        collection.find().forEach((Block<Document>) document -> list.add(document.toJson()));
 
         return list;
     }
 
     public MongoCollection<Document> getCollection() {
         return collection;
-    }
-
-    public Serializer getSerializer() {
-        return serializer;
-    }
-
-    public Class<K> getKeyClass() {
-        return keyClass;
-    }
-
-    public Class<V> getValueClass() {
-        return valueClass;
     }
 }

@@ -11,63 +11,57 @@ import redis.clients.jedis.resps.ScanResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RedisStorage<K, V> {
+public class RedisStorage {
 
     private final RedisConnection connection;
-    private final Serializer serializer;
     private final String prefix;
-    private final Class<K> keyClass;
-    private final Class<V> valueClass;
 
-    public RedisStorage(RedisConnection connection, Serializer serializer, String prefix, Class<K> keyClass, Class<V> valueClass) {
+    public RedisStorage(RedisConnection connection, String prefix) {
         this.connection = connection;
-        this.serializer = serializer;
         this.prefix = connection.getCluster() + prefix + ":";
-        this.keyClass = keyClass;
-        this.valueClass = valueClass;
     }
 
-    public void create(K key, V value) {
+    public void create(String key, String value) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            jedis.set(prefix + key.toString(), serializer.serialize(value));
+            jedis.set(prefix + key, value);
         }
     }
 
-    public void createWithTTL(K key, V value, int seconds) {
+    public void createWithTTL(String key, String value, int seconds) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            jedis.setex(prefix + key.toString(), seconds, serializer.serialize(value));
+            jedis.setex(prefix + key, seconds, value);
         }
     }
 
-    public void update(K key, V value){
+    public void update(String key, String value){
         create(key, value);
     }
 
-    public void updateWithTTL(K key, V value, int seconds){
+    public void updateWithTTL(String key, String value, int seconds){
         createWithTTL(key, value, seconds);
     }
 
-    public boolean contains(K key) {
+    public boolean contains(String key) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            return jedis.exists(prefix + key.toString());
+            return jedis.exists(prefix + key);
         }
     }
 
     @Nullable
-    public V get(K key) {
+    public String get(String key) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            return serializer.deserialize(jedis.get(prefix + key.toString()), valueClass);
+            return jedis.get(prefix + key);
         }
     }
 
-    public void delete(K key) {
+    public void delete(String key) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            jedis.del(prefix + key.toString());
+            jedis.del(prefix + key);
         }
     }
 
     @NotNull
-    public List<V> getAllValues() {
+    public List<String> getAllValues() {
         try (Jedis jedis = connection.getPool().getResource()) {
             ScanParams scanParams = new ScanParams().match(prefix + "*");
             List<String> keys = new ArrayList<>();
@@ -83,44 +77,28 @@ public class RedisStorage<K, V> {
                 }
             }
 
-            List<V> results = new ArrayList<>();
+            List<String> results = new ArrayList<>();
             for (String tempKey : keys) {
-                results.add(serializer.deserialize(jedis.get(tempKey), valueClass));
+                results.add(jedis.get(tempKey));
             }
 
             return results;
         }
     }
 
-    public boolean setTTL(K key, int seconds){
+    public boolean setTTL(String key, int seconds){
         try (Jedis jedis = connection.getPool().getResource()) {
-            return jedis.expire(prefix + key.toString(), seconds) == 1;
+            return jedis.expire(prefix + key, seconds) == 1;
         }
     }
 
-    public boolean removeTTL(K key){
+    public boolean removeTTL(String key){
         try (Jedis jedis = connection.getPool().getResource()) {
-            return jedis.persist(prefix + key.toString()) == 1;
+            return jedis.persist(prefix + key) == 1;
         }
     }
 
     public RedisConnection getConnection() {
         return connection;
-    }
-
-    public Serializer getSerializer() {
-        return serializer;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public Class<K> getKeyClass() {
-        return keyClass;
-    }
-
-    public Class<V> getValueClass() {
-        return valueClass;
     }
 }
