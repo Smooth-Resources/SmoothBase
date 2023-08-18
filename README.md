@@ -9,9 +9,16 @@ Simple base to reduce boilerplate code.
 
 - Maven
 ```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
 <dependencies>
     <dependency>
-        <groupId>net.smoothplugins</groupId>
+        <groupId>com.github.Smooth-Plugins</groupId>
         <artifactId>SmoothBase</artifactId>
         <version>v1.0.0</version>
     </dependency>
@@ -19,8 +26,12 @@ Simple base to reduce boilerplate code.
 ```
 - Gradle:
 ```groovy
+repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+}
 dependencies {
-    implementation "net.smoothplugins:SmoothBase:v1.0.0"
+    implementation 'com.github.Smooth-Plugins:SmoothBase:v1.0.0'
 }
 ```
 
