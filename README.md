@@ -27,7 +27,6 @@ Simple base to reduce boilerplate code.
 - Gradle:
 ```groovy
 repositories {
-    ...
     maven { url 'https://jitpack.io' }
 }
 dependencies {
