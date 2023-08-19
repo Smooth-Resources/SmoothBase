@@ -20,7 +20,7 @@ Simple base to reduce boilerplate code.
     <dependency>
         <groupId>com.github.Smooth-Plugins</groupId>
         <artifactId>SmoothBase</artifactId>
-        <version>v1.0.0</version>
+        <version>v1.0.1</version>
     </dependency>
 </dependencies>
 ```
