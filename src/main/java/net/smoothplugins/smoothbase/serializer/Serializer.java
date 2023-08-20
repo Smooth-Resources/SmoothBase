@@ -2,11 +2,17 @@ package net.smoothplugins.smoothbase.serializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.smoothplugins.smoothbase.serializer.adapter.LocalDateAdapter;
+import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import net.smoothplugins.smoothbase.serializer.adapter.*;
+import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Serializer {
@@ -17,7 +23,14 @@ public class Serializer {
         if (additionalAdapters == null) additionalAdapters = new HashMap<>();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Component.class, new ComponentAdapter());
+        gsonBuilder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
+        gsonBuilder.registerTypeAdapter(Location.class, new LocationAdapter());
+        gsonBuilder.registerTypeAdapter(LongAdapter.class, new LongAdapter());
+        gsonBuilder.registerTypeAdapter(Sound.class, new SoundAdapter());
+        gsonBuilder.registerTypeAdapter(Title.class, new TitleAdapter());
 
         for (Type type : additionalAdapters.keySet()) {
             gsonBuilder.registerTypeAdapter(type, additionalAdapters.get(type));
