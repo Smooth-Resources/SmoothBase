@@ -21,17 +21,17 @@ public class MongoStorage {
         collection.insertOne(Document.parse(JSON));
     }
 
-    public void update(String key, String objective, String value){
-        collection.replaceOne(new Document(key, objective), Document.parse(value));
+    public void update(String key, String value, String JSON){
+        collection.replaceOne(new Document(key, value), Document.parse(JSON));
     }
 
-    public boolean contains(String key, String objective) {
-        return collection.find(new Document(key, objective)).first() != null;
+    public boolean contains(String key, String value) {
+        return collection.find(new Document(key, value)).first() != null;
     }
 
     @Nullable
-    public String get(String key, String objective) {
-        Document result = collection.find(new Document(key, objective)).first();
+    public String get(String key, String value) {
+        Document result = collection.find(new Document(key, value)).first();
         if (result != null) {
             return result.toJson();
         }
@@ -39,8 +39,8 @@ public class MongoStorage {
         return null;
     }
 
-    public void delete(String key, String objective) {
-        collection.deleteOne(new Document(key, objective));
+    public void delete(String key, String value) {
+        collection.deleteOne(new Document(key, value));
     }
 
     @NotNull
