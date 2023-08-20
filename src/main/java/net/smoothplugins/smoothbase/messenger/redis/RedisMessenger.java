@@ -54,7 +54,7 @@ public class RedisMessenger implements Messenger {
                     pendingResponses.get(identifier).onFail(channel);
                     pendingResponses.remove(identifier);
                 }
-            }, (timeout / 1000L) * 20L);
+            }, (int) ((timeout / 1000F) * 20L));
         }
     }
 
