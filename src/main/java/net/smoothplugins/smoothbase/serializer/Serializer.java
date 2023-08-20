@@ -24,7 +24,7 @@ public class Serializer {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Component.class, new ComponentAdapter());
-        gsonBuilder.registerTypeAdapter(ItemStack.class, new ItemStackAdapter());
+        gsonBuilder.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter());
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         gsonBuilder.registerTypeAdapter(Location.class, new LocationAdapter());
