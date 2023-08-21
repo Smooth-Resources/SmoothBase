@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.smoothplugins.smoothbase.serializer.adapter.*;
 import org.bukkit.Location;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +24,7 @@ public class Serializer {
         if (additionalAdapters == null) additionalAdapters = new HashMap<>();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeHierarchyAdapter(Advancement.class, new AdvancementAdapter());
         gsonBuilder.registerTypeAdapter(Component.class, new ComponentAdapter());
         gsonBuilder.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter());
         gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
