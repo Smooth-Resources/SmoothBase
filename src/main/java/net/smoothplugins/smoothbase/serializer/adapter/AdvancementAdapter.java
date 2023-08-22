@@ -16,6 +16,6 @@ public class AdvancementAdapter implements JsonSerializer<Advancement>, JsonDese
 
     @Override
     public JsonElement serialize(Advancement advancement, Type type, JsonSerializationContext jsonSerializationContext) {
-        return new JsonPrimitive(advancement.getKey().toString());
+        return new JsonPrimitive(advancement.getKey().getKey());
     }
 }
