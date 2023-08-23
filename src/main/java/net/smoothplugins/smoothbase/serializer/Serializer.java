@@ -9,6 +9,7 @@ import net.smoothplugins.smoothbase.serializer.adapter.*;
 import org.bukkit.Location;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
@@ -31,6 +32,7 @@ public class Serializer {
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
         gsonBuilder.registerTypeAdapter(Location.class, new LocationAdapter());
         gsonBuilder.registerTypeAdapter(LongAdapter.class, new LongAdapter());
+        gsonBuilder.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter());
         gsonBuilder.registerTypeAdapter(Sound.class, new SoundAdapter());
         gsonBuilder.registerTypeAdapter(Title.class, new TitleAdapter());
 
