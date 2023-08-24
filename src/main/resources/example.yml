@@ -14,3 +14,6 @@ notification:
     fadeIn: 0.5
     stay: 2
     fadeOut: 0.5
+  sound:
+    enabled: true
+    content: "ENTITY_PLAYER_LEVELUP"
