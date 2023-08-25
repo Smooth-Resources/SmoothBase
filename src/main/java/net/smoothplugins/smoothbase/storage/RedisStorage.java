@@ -98,6 +98,12 @@ public class RedisStorage {
         }
     }
 
+    public boolean hasTTL(String key) {
+        try (Jedis jedis = connection.getPool().getResource()) {
+            return jedis.ttl(prefix + key) != -1;
+        }
+    }
+
     public RedisConnection getConnection() {
         return connection;
     }
