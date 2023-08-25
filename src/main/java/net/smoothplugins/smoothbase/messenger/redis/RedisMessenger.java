@@ -34,18 +34,18 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void send(Object object) {
+    public void send(String JSON) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            Message finalMessage = new Message(Message.MessageType.NORMAL, null, object);
+            Message finalMessage = new Message(Message.MessageType.NORMAL, null, JSON);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
         }
     }
 
     @Override
-    public void sendRequest(Object object, Response response, long timeout) {
+    public void sendRequest(String JSON, Response response, long timeout) {
         try (Jedis jedis = connection.getPool().getResource()) {
             UUID identifier = UUID.randomUUID();
-            Message finalMessage = new Message(Message.MessageType.REQUEST, identifier, object);
+            Message finalMessage = new Message(Message.MessageType.REQUEST, identifier, JSON);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
             pendingResponses.put(identifier, response);
 
@@ -59,9 +59,9 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void sendResponse(Object object, UUID identifier) {
+    public void sendResponse(String JSON, UUID identifier) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            Message finalMessage = new Message(Message.MessageType.RESPONSE, identifier, object);
+            Message finalMessage = new Message(Message.MessageType.RESPONSE, identifier, JSON);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
         }
     }
@@ -72,10 +72,10 @@ public class RedisMessenger implements Messenger {
             if (!pendingResponses.containsKey(message.getIdentifier())) return;
 
             Response response = pendingResponses.get(message.getIdentifier());
-            response.onSuccess(CHANNEL, message.getMessage());
+            response.onSuccess(CHANNEL, message.getJSON());
             pendingResponses.remove(message.getIdentifier());
         } else {
-            consumer.consume((String) message.getMessage());
+            consumer.consume(message.getJSON(), message.getIdentifier());
         }
     }
 

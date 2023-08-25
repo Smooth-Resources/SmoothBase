@@ -8,12 +8,12 @@ public class Message {
 
     private final MessageType type;
     private final UUID identifier;
-    private final Object message;
+    private final String JSON;
 
-    public Message(MessageType type, UUID identifier, Object message) {
+    public Message(MessageType type, UUID identifier, String JSON) {
         this.type = type;
         this.identifier = identifier;
-        this.message = message;
+        this.JSON = JSON;
     }
 
     public MessageType getType() {
@@ -25,8 +25,8 @@ public class Message {
         return identifier;
     }
 
-    public Object getMessage() {
-        return message;
+    public String getJSON() {
+        return JSON;
     }
 
     public enum MessageType {

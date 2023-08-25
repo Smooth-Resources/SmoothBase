@@ -6,31 +6,27 @@ public interface Messenger {
 
     /**
      * Send a message to a channel, without expecting a response
-     * @param channel
      * @param JSON
      */
-    void send(Object object);
+    void send(String JSON);
 
     /**
      * Send a message to a channel, expecting a response.
-     * @param channel
      * @param JSON
      * @param response
      * @param timeout
      */
-    void sendRequest(Object object, Response response, long timeout);
+    void sendRequest(String JSON, Response response, long timeout);
 
     /**
      * Send a response to a request.
-     * @param channel
      * @param JSON
      * @param identifier
      */
-    void sendResponse(Object object, UUID identifier);
+    void sendResponse(String JSON, UUID identifier);
 
     /**
      * Called when a message is received.
-     * @param channel
      * @param message
      */
     void onMessage(Message message);
