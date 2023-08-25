@@ -34,7 +34,7 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void send(String channel, String JSON) {
+    public void send(String JSON) {
         try (Jedis jedis = connection.getPool().getResource()) {
             Message finalMessage = new Message(Message.MessageType.NORMAL, null, JSON);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
@@ -42,7 +42,7 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void sendRequest(String channel, String JSON, Response response, long timeout) {
+    public void sendRequest(String JSON, Response response, long timeout) {
         try (Jedis jedis = connection.getPool().getResource()) {
             UUID identifier = UUID.randomUUID();
             Message finalMessage = new Message(Message.MessageType.REQUEST, identifier, JSON);
@@ -51,7 +51,7 @@ public class RedisMessenger implements Messenger {
 
             Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
                 if (pendingResponses.containsKey(identifier)) {
-                    pendingResponses.get(identifier).onFail(channel);
+                    pendingResponses.get(identifier).onFail(CHANNEL);
                     pendingResponses.remove(identifier);
                 }
             }, (int) ((timeout / 1000F) * 20L));
@@ -59,7 +59,7 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void sendResponse(String channel, String JSON, UUID identifier) {
+    public void sendResponse(String JSON, UUID identifier) {
         try (Jedis jedis = connection.getPool().getResource()) {
             Message finalMessage = new Message(Message.MessageType.RESPONSE, identifier, JSON);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
@@ -67,12 +67,12 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void onMessage(String channel, Message message) {
+    public void onMessage(Message message) {
         if (message.getType() == Message.MessageType.RESPONSE) {
             if (!pendingResponses.containsKey(message.getIdentifier())) return;
 
             Response response = pendingResponses.get(message.getIdentifier());
-            response.onSuccess(channel, message.getMessage());
+            response.onSuccess(CHANNEL, message.getMessage());
             pendingResponses.remove(message.getIdentifier());
         } else {
             consumer.consume((String) message.getMessage());
@@ -135,7 +135,7 @@ public class RedisMessenger implements Messenger {
         public void onMessage(String channel, String message) {
             if (channel.equals(CHANNEL)) {
                 Message finalMessage = serializer.deserialize(message, Message.class);
-                RedisMessenger.this.onMessage(channel, finalMessage);
+                RedisMessenger.this.onMessage(finalMessage);
             }
         }
     }
