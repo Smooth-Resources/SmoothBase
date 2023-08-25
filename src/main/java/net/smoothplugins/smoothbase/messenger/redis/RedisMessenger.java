@@ -34,18 +34,18 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void send(String JSON) {
+    public void send(Object object) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            Message finalMessage = new Message(Message.MessageType.NORMAL, null, JSON);
+            Message finalMessage = new Message(Message.MessageType.NORMAL, null, object);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
         }
     }
 
     @Override
-    public void sendRequest(String JSON, Response response, long timeout) {
+    public void sendRequest(Object object, Response response, long timeout) {
         try (Jedis jedis = connection.getPool().getResource()) {
             UUID identifier = UUID.randomUUID();
-            Message finalMessage = new Message(Message.MessageType.REQUEST, identifier, JSON);
+            Message finalMessage = new Message(Message.MessageType.REQUEST, identifier, object);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
             pendingResponses.put(identifier, response);
 
@@ -59,9 +59,9 @@ public class RedisMessenger implements Messenger {
     }
 
     @Override
-    public void sendResponse(String JSON, UUID identifier) {
+    public void sendResponse(Object object, UUID identifier) {
         try (Jedis jedis = connection.getPool().getResource()) {
-            Message finalMessage = new Message(Message.MessageType.RESPONSE, identifier, JSON);
+            Message finalMessage = new Message(Message.MessageType.RESPONSE, identifier, object);
             jedis.publish(CHANNEL, serializer.serialize(finalMessage));
         }
     }

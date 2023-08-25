@@ -9,7 +9,7 @@ public interface Messenger {
      * @param channel
      * @param JSON
      */
-    void send(String JSON);
+    void send(Object object);
 
     /**
      * Send a message to a channel, expecting a response.
@@ -18,7 +18,7 @@ public interface Messenger {
      * @param response
      * @param timeout
      */
-    void sendRequest(String JSON, Response response, long timeout);
+    void sendRequest(Object object, Response response, long timeout);
 
     /**
      * Send a response to a request.
@@ -26,7 +26,7 @@ public interface Messenger {
      * @param JSON
      * @param identifier
      */
-    void sendResponse(String JSON, UUID identifier);
+    void sendResponse(Object object, UUID identifier);
 
     /**
      * Called when a message is received.
