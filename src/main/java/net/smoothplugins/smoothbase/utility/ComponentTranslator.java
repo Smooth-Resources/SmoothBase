@@ -49,6 +49,6 @@ public class ComponentTranslator {
     }
 
     public static boolean hasMiniMessageFormat(String text) {
-        return text.contains("<") && text.contains(">");
+        return text.contains("<") && text.contains(">") && !text.contains("&");
     }
 }
