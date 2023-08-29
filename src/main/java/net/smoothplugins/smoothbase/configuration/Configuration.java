@@ -104,7 +104,7 @@ public class Configuration extends YamlConfiguration {
     @NotNull
     public List<Component> getComponentList(String path) {
         List<Component> componentList = new ArrayList<>();
-        getColoredList(path).forEach(text -> {
+        getStringList(path).forEach(text -> {
             componentList.add(ComponentTranslator.toComponent(text));
         });
 
@@ -114,7 +114,7 @@ public class Configuration extends YamlConfiguration {
     @NotNull
     public List<Component> getComponentList(String path, @Nullable HashMap<String, String> placeholders) {
         List<Component> componentList = new ArrayList<>();
-        getColoredList(path).forEach(text -> {
+        getStringList(path).forEach(text -> {
             componentList.add(ComponentTranslator.toComponent(PlaceholderReplacer.replace(text, placeholders)));
         });
 

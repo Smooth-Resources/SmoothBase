@@ -104,6 +104,12 @@ public class RedisStorage {
         }
     }
 
+    public long getTTL(String key) {
+        try (Jedis jedis = connection.getPool().getResource()) {
+            return jedis.ttl(prefix + key);
+        }
+    }
+
     public RedisConnection getConnection() {
         return connection;
     }
