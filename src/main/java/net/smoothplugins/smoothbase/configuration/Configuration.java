@@ -45,30 +45,38 @@ public class Configuration extends YamlConfiguration {
         this(plugin, fileName, fileExtension, plugin.getDataFolder());
     }
 
-    @Nullable
+    @Override
+    @NotNull
+    public String getString(@NotNull String path) {
+        String string = super.getString(path);
+        if (string == null) return path;
+
+        return string;
+    }
+
+    @NotNull
     public String getString(String path, @Nullable HashMap<String, String> placeholders) {
         return PlaceholderReplacer.replace(getString(path), placeholders);
     }
 
-    @Nullable
+    @NotNull
     public String getColoredString(String path) {
-        String message = super.getString(path);
-        if (message == null) return null;
+        String message = getString(path);
 
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    @Nullable
+    @NotNull
     public String getColoredString(String path, @Nullable HashMap<String, String> placeholders) {
         return PlaceholderReplacer.replace(getColoredString(path), placeholders);
     }
 
-    @Nullable
+    @NotNull
     public Component getComponent(String path) {
         return ComponentTranslator.toComponent(getString(path));
     }
 
-    @Nullable
+    @NotNull
     public Component getComponent(String path, @Nullable HashMap<String, String> placeholders) {
         return ComponentTranslator.toComponent(getString(path, placeholders));
     }
@@ -133,7 +141,6 @@ public class Configuration extends YamlConfiguration {
     @Nullable
     public Sound getSound(String typePath, String volumePath, String pitchPath) {
         String soundName = getString(typePath);
-        if (soundName == null) return null;
 
         org.bukkit.Sound sound = org.bukkit.Sound.valueOf(soundName.toUpperCase(Locale.ROOT));
         float volume = getFloat(volumePath);
@@ -141,20 +148,18 @@ public class Configuration extends YamlConfiguration {
         return Sound.sound(sound, Sound.Source.MASTER, volume, pitch);
     }
 
-    @Nullable
+    @NotNull
     public Title getTitle(String titlePath, String subtitlePath, @Nullable HashMap<String, String> placeholders) {
         Component title = getComponent(titlePath, placeholders);
         Component subtitle = getComponent(subtitlePath, placeholders);
-        if (title == null || subtitle == null) return null;
 
         return Title.title(title, subtitle);
     }
 
-    @Nullable
+    @NotNull
     public Title getTitle(String titlePath, String subtitlePath, String fadeInPath, String stayPath, String fadeOutPath, @Nullable HashMap<String, String> placeholders) {
         Component title = getComponent(titlePath, placeholders);
         Component subtitle = getComponent(subtitlePath, placeholders);
-        if (title == null || subtitle == null) return null;
 
         Duration fadeIn = Duration.ofMillis(getInt(fadeInPath));
         Duration stay = Duration.ofMillis(getInt(stayPath));
