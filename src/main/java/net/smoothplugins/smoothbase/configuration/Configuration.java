@@ -45,8 +45,7 @@ public class Configuration extends YamlConfiguration {
         this(plugin, fileName, fileExtension, plugin.getDataFolder());
     }
 
-    @Override
-    @NotNull
+    @Override @NotNull
     public String getString(@NotNull String path) {
         String string = super.getString(path);
         if (string == null) return path;
@@ -75,6 +74,7 @@ public class Configuration extends YamlConfiguration {
     public Component getComponent(String path) {
         return ComponentTranslator.toComponent(getString(path));
     }
+
 
     @NotNull
     public Component getComponent(String path, @Nullable HashMap<String, String> placeholders) {

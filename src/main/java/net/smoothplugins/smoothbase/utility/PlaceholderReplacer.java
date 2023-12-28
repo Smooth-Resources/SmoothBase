@@ -16,6 +16,8 @@ public class PlaceholderReplacer {
         for (Map.Entry<String, String> entry : placeholders.entrySet()) {
             if (!message.contains(entry.getKey())) continue;
 
+            if (entry.getValue() == null) entry.setValue("");
+
             messageWithPlaceholders = messageWithPlaceholders.replace(entry.getKey(), entry.getValue());
         }
 

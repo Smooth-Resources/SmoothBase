@@ -68,7 +68,7 @@ public class LocationAdapter implements JsonDeserializer<Location>, JsonSerializ
     @Override
     public JsonElement serialize( Location location, Type type, JsonSerializationContext jsonSerializationContext ) {
         final JsonObject obj = new JsonObject();
-        obj.addProperty( "world", location.getWorld().getName() );
+        obj.addProperty( "world", location.getWorld().getName());
         obj.addProperty( "x", location.getX() );
         obj.addProperty( "y", location.getY() );
         obj.addProperty( "z", location.getZ() );
