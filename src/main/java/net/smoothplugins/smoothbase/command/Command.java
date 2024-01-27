@@ -2,8 +2,11 @@ package net.smoothplugins.smoothbase.command;
 
 import net.kyori.adventure.text.Component;
 import net.smoothplugins.smoothbase.utility.ComponentTranslator;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -87,6 +90,30 @@ public abstract class Command {
 
     public Set<Command> getSubcommands() {
         return subcommands;
+    }
+
+    public void registerCommand(Plugin plugin) {
+        registerSubcommands();
+
+        org.bukkit.command.Command bukkitCommand = new org.bukkit.command.Command(getName()) {
+            @Override
+            public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] args) {
+                performChecksAndExecute(sender, args);
+                return true;
+            }
+
+            @Override
+            public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+                return performChecksAndTabComplete(sender, args);
+            }
+        };
+
+        List<String> aliases = getAliases();
+        if (aliases != null && !aliases.isEmpty()) {
+            bukkitCommand.setAliases(getAliases());
+        }
+
+        Bukkit.getCommandMap().register(plugin.getName(), bukkitCommand);
     }
 
     private Command getApplicableCommandOrSubcommand(String[] args) {
