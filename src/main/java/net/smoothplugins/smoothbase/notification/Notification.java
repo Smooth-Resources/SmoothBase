@@ -5,6 +5,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.smoothplugins.smoothbase.configuration.Configuration;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,12 +25,14 @@ public class Notification {
     private final Component actionBar;
     private final Title title;
     private final Sound sound;
+    private final String bukkitSound;
 
-    public Notification(List<Component> chat, Component actionBar, Title title, Sound sound) {
+    public Notification(List<Component> chat, Component actionBar, Title title, Sound sound, String bukkitSound) {
         this.chat = chat;
         this.actionBar = actionBar;
         this.title = title;
         this.sound = sound;
+        this.bukkitSound = bukkitSound;
     }
 
     @NotNull
@@ -38,7 +41,8 @@ public class Notification {
                 getChat(config, path + ".chat", placeholders),
                 getActionbar(config, path + ".actionbar", placeholders),
                 getTitle(config, path + ".title", placeholders),
-                getSound(config, path + ".sound")
+                getSound(config, path + ".sound"),
+                getBukkitSound(config, path + ".sound")
         );
     }
 
@@ -61,9 +65,19 @@ public class Notification {
     }
 
     private static Sound getSound(Configuration config, String path) {
+        try {
+            if (!config.getBoolean(path + ".enabled")) return null;
+
+            return config.getSound(path + ".content");
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    private static String getBukkitSound(Configuration config, String path) {
         if (!config.getBoolean(path + ".enabled")) return null;
 
-        return config.getSound(path + ".content");
+        return config.getString(path + ".content");
     }
 
     public List<Component> getChat() {
@@ -80,6 +94,10 @@ public class Notification {
 
     public Sound getSound() {
         return sound;
+    }
+
+    public String getBukkitSound() {
+        return bukkitSound;
     }
 
     public void send(Player... players) {
@@ -99,6 +117,12 @@ public class Notification {
 
         if (getSound() != null) {
             audience.playSound(getSound());
+        } else {
+            try {
+                for (Player player : players) {
+                    player.playSound(player.getLocation(), getBukkitSound(), SoundCategory.MASTER,  1, 1);
+                }
+            } catch (Exception ignored) {}
         }
     }
 }
