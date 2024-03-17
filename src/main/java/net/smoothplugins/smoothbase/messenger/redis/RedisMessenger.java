@@ -16,15 +16,15 @@ import java.util.UUID;
 
 public class RedisMessenger implements Messenger {
 
-    private Plugin plugin;
-    private RedisConnection connection;
-    private MessageConsumer consumer;
-    private Serializer serializer;
+    private final Plugin plugin;
+    private final RedisConnection connection;
+    private final MessageConsumer consumer;
+    private final Serializer serializer;
     private Subscriber subscriber;
     private String CHANNEL;
     private boolean closing = false;
 
-    private HashMap<UUID, Response> pendingResponses = new HashMap<>();
+    private final HashMap<UUID, Response> pendingResponses = new HashMap<>();
 
     public RedisMessenger(Plugin plugin, RedisConnection connection, MessageConsumer consumer, Serializer serializer) {
         this.plugin = plugin;

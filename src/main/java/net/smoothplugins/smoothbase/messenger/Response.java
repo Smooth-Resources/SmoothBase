@@ -5,7 +5,7 @@ public interface Response {
     /**
      * Called when the response is received in the specified timeout.
      * @param channel
-     * @param response
+     * @param JSON
      */
     void onSuccess(String channel, String JSON);
 
