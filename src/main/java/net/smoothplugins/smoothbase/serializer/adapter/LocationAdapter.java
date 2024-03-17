@@ -18,63 +18,76 @@ public class LocationAdapter implements JsonDeserializer<Location>, JsonSerializ
     public static final LocationAdapter INSTANCE = new LocationAdapter();
 
     @Override
-    public Location deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext ) throws JsonParseException {
-        if ( !json.isJsonObject() ) {
+    public Location deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (!json.isJsonObject()) {
             throw new JsonParseException( "not a JSON object" );
         }
 
         final JsonObject obj = (JsonObject) json;
-        final JsonElement world = obj.get( "world" );
-        final JsonElement x = obj.get( "x" );
-        final JsonElement y = obj.get( "y" );
-        final JsonElement z = obj.get( "z" );
-        final JsonElement yaw = obj.get( "yaw" );
-        final JsonElement pitch = obj.get( "pitch" );
+        final JsonElement world = obj.get("world");
+        final JsonElement x = obj.get("x");
+        final JsonElement y = obj.get("y");
+        final JsonElement z = obj.get("z");
+        final JsonElement yaw = obj.get("yaw");
+        final JsonElement pitch = obj.get("pitch");
 
-        if ( world == null || x == null || y == null || z == null || yaw == null || pitch == null ) {
-            throw new JsonParseException( "Malformed location json string!" );
+        if (world == null || x == null || y == null || z == null || yaw == null || pitch == null) {
+            System.out.println("Malformed location json string!");
+            return null;
         }
 
-        if ( !world.isJsonPrimitive() || !((JsonPrimitive) world).isString() ) {
-            throw new JsonParseException( "world is not a string" );
+        if (!world.isJsonPrimitive() || !((JsonPrimitive) world).isString()) {
+            System.out.println("world is not a string");
+            return null;
         }
 
-        if ( !x.isJsonPrimitive() || !((JsonPrimitive) x).isNumber() ) {
-            throw new JsonParseException( "x is not a number" );
+        if (!x.isJsonPrimitive() || !((JsonPrimitive) x).isNumber()) {
+            System.out.println("x is not a number");
+            return null;
         }
 
-        if ( !y.isJsonPrimitive() || !((JsonPrimitive) y).isNumber() ) {
-            throw new JsonParseException( "y is not a number" );
+        if (!y.isJsonPrimitive() || !((JsonPrimitive) y).isNumber()) {
+            System.out.println("y is not a number");
+            return null;
         }
 
-        if ( !z.isJsonPrimitive() || !((JsonPrimitive) z).isNumber() ) {
-            throw new JsonParseException( "z is not a number" );
+        if (!z.isJsonPrimitive() || !((JsonPrimitive) z).isNumber()) {
+            System.out.println("z is not a number");
+            return null;
         }
 
-        if ( !yaw.isJsonPrimitive() || !((JsonPrimitive) yaw).isNumber() ) {
-            throw new JsonParseException( "yaw is not a number" );
+        if (!yaw.isJsonPrimitive() || !((JsonPrimitive) yaw).isNumber()) {
+            System.out.println("yaw is not a number");
+            return null;
         }
 
-        if ( !pitch.isJsonPrimitive() || !((JsonPrimitive) pitch).isNumber() ) {
-            throw new JsonParseException( "pitch is not a number" );
+        if (!pitch.isJsonPrimitive() || !((JsonPrimitive) pitch).isNumber()) {
+            System.out.println("pitch is not a number");
+            return null;
         }
 
-        World worldInstance = Bukkit.getWorld( world.getAsString() );
+        World worldInstance = Bukkit.getWorld(world.getAsString());
+        if (worldInstance == null) {
+            System.out.println("World " + world.getAsString() + " not found!");
+            return null;
+        }
 
-        return new Location( worldInstance, x.getAsDouble(), y.getAsDouble(), z.getAsDouble(), yaw.getAsFloat(), pitch.getAsFloat() );
-
+        return new Location(worldInstance, x.getAsDouble(), y.getAsDouble(), z.getAsDouble(), yaw.getAsFloat(), pitch.getAsFloat());
     }
 
     @Override
-    public JsonElement serialize( Location location, Type type, JsonSerializationContext jsonSerializationContext ) {
-        final JsonObject obj = new JsonObject();
-        obj.addProperty( "world", location.getWorld().getName());
-        obj.addProperty( "x", location.getX() );
-        obj.addProperty( "y", location.getY() );
-        obj.addProperty( "z", location.getZ() );
-        obj.addProperty( "yaw", location.getYaw() );
-        obj.addProperty( "pitch", location.getPitch() );
-        return obj;
+    public JsonElement serialize(Location location, Type type, JsonSerializationContext jsonSerializationContext) {
+        if (location == null) {
+            return JsonNull.INSTANCE;
+        }
 
+        final JsonObject obj = new JsonObject();
+        obj.addProperty("world", location.getWorld().getName());
+        obj.addProperty("x", location.getX());
+        obj.addProperty("y", location.getY());
+        obj.addProperty("z", location.getZ());
+        obj.addProperty("yaw", location.getYaw());
+        obj.addProperty("pitch", location.getPitch());
+        return obj;
     }
 }
