@@ -35,15 +35,15 @@ public abstract class Command {
     public abstract List<String> tabComplete(CommandSender sender, String[] args);
 
     public Component getPlayerComponent() {
-        return ComponentTranslator.toComponent("&c✘ Debes ser un jugador para hacer eso.");
+        return ComponentTranslator.toComponent("&c✘ You must be a player to do that.");
     }
 
     public Component getPermissionComponent() {
-        return ComponentTranslator.toComponent("&c✘ No tienes permiso.");
+        return ComponentTranslator.toComponent("&c✘ You don't have permission.");
     }
 
     public Component getUsageComponent() {
-        return ComponentTranslator.toComponent("&c✘ Uso: " + getUsage());
+        return ComponentTranslator.toComponent("&c✘ Use: " + getUsage());
     }
 
     public void performChecksAndExecute(CommandSender sender, String[] args) {
