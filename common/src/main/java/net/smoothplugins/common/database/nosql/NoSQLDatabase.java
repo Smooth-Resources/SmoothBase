@@ -40,4 +40,12 @@ public abstract class NoSQLDatabase extends Database {
      * @param key The key of the document.
      */
     public abstract void delete(@NotNull String key);
+
+    /**
+     * Checks if a JSON document exists by key.
+     *
+     * @param key The key of the document.
+     * @return True if the document exists, false otherwise.
+     */
+    public abstract boolean exists(@NotNull String key);
 }
