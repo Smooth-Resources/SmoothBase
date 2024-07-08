@@ -43,6 +43,51 @@ public class MongoDBDatabase extends NoSQLDatabase {
         return collection;
     }
 
+    /**
+     * Gets a document from the collection.
+     *
+     * @param key  The key of the document.
+     * @param value The value of the key.
+     */
+    @Nullable
+    public String get(@NotNull String key, String value) {
+        Document document = collection.find(new Document(key, value)).first();
+        return document == null ? null : document.toJson();
+    }
+
+    /**
+     * Updates a document in the collection.
+     *
+     * @param key   The key of the document.
+     * @param value The value of the key.
+     * @param json  The new JSON value of the document.
+     */
+    public void update(@NotNull String key, @NotNull String value, @NotNull String json) {
+        Document document = Document.parse(json);
+        collection.replaceOne(new Document(key, value), document);
+    }
+
+    /**
+     * Deletes a document from the collection.
+     *
+     * @param key   The key of the document.
+     * @param value The value of the key.
+     */
+    public void delete(@NotNull String key, @NotNull String value) {
+        collection.deleteOne(new Document(key, value));
+    }
+
+    /**
+     * Checks if a document exists in the collection.
+     *
+     * @param key   The key of the document.
+     * @param value The value of the key.
+     * @return True if the document exists, false otherwise.
+     */
+    public boolean exists(@NotNull String key, @NotNull String value) {
+        return collection.find(new Document(key, value)).first() != null;
+    }
+
     @Override
     public void connect() {
         MongoClient client = new MongoClient(new MongoClientURI(uri));
@@ -63,18 +108,21 @@ public class MongoDBDatabase extends NoSQLDatabase {
     @Nullable
     @Override
     public String get(@NotNull String key) {
-        Document document = collection.find(new Document("_id", key)).first();
-        return document == null ? null : document.toJson();
+        return get("_id", key);
     }
 
     @Override
     public void update(@NotNull String key, @NotNull String json) {
-        Document document = Document.parse(json).append("_id", key);
-        collection.replaceOne(new Document("_id", key), document);
+        update("_id", key, json);
     }
 
     @Override
     public void delete(@NotNull String key) {
-        collection.deleteOne(new Document("_id", key));
+        delete("_id", key);
+    }
+
+    @Override
+    public boolean exists(@NotNull String key) {
+        return exists("_id", key);
     }
 }
