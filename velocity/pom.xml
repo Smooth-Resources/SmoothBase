@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.smoothplugins</groupId>
         <artifactId>smoothbase</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>v2.0.0</version>
     </parent>
 
     <artifactId>smoothbase-velocity</artifactId>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>net.smoothplugins</groupId>
             <artifactId>smoothbase-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>v2.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.velocitypowered</groupId>
