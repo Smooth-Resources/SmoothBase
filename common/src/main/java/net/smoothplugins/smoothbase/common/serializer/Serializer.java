@@ -9,6 +9,7 @@ import net.smoothplugins.smoothbase.common.serializer.adapter.LocalDateTimeAdapt
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -82,12 +83,12 @@ public class Serializer {
         /**
          * Registers a type adapter for a specific class type.
          *
-         * @param type    The class type.
+         * @param type    The adapter type.
          * @param adapter The adapter to register.
          * @return The current Builder instance.
          */
         @NotNull
-        public Builder registerTypeAdapter(@NotNull Class<?> type, @NotNull Object adapter) {
+        public Builder registerTypeAdapter(@NotNull Type type, @NotNull Object adapter) {
             gsonBuilder.registerTypeAdapter(type, adapter);
             return this;
         }
