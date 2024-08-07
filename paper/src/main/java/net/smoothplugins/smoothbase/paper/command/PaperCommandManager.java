@@ -5,14 +5,12 @@ import net.smoothplugins.smoothbase.common.command.CommandManager;
 import net.smoothplugins.smoothbase.common.command.CommandUtils;
 import net.smoothplugins.smoothbase.common.command.TargetableCommand;
 import net.smoothplugins.smoothbase.common.task.TaskManager;
-import net.smoothplugins.smoothbase.paper.task.PaperTaskManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,15 +20,46 @@ public class PaperCommandManager implements CommandManager {
 
     private final Plugin plugin;
     private final TaskManager taskManager;
+    private final CommandUtils commandUtils;
 
     /**
      * Creates a new PaperCommandManager.
      *
      * @param plugin The Plugin instance.
+     * @param taskManager The TaskManager instance.
+     * @param commandUtils The CommandUtils instance.
      */
-    public PaperCommandManager(@NotNull Plugin plugin) {
+    public PaperCommandManager(@NotNull Plugin plugin, @NotNull TaskManager taskManager, @NotNull CommandUtils commandUtils) {
         this.plugin = plugin;
-        this.taskManager = new PaperTaskManager(plugin);
+        this.taskManager = taskManager;
+        this.commandUtils = commandUtils;
+    }
+
+    /**
+     * Gets the Plugin instance.
+     *
+     * @return The Plugin instance.
+     */
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    /**
+     * Gets the TaskManager instance.
+     *
+     * @return The TaskManager instance.
+     */
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    /**
+     * Gets the CommandUtils instance.
+     *
+     * @return The CommandUtils instance.
+     */
+    public CommandUtils getCommandUtils() {
+        return commandUtils;
     }
 
     @Override
@@ -40,18 +69,18 @@ public class PaperCommandManager implements CommandManager {
         org.bukkit.command.Command bukkitCommand = new org.bukkit.command.Command(command.getName()) {
             @Override
             public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] args) {
-                Command applicableCommand = CommandUtils.getApplicableCommand(command, args);
+                Command applicableCommand = commandUtils.getApplicableCommand(command, args);
                 PaperCommandSender paperCommandSender = new PaperCommandSender(sender);
 
                 if (!(applicableCommand instanceof TargetableCommand targetableCommand)) {
-                    if (!CommandUtils.performsChecks(false, applicableCommand, paperCommandSender, args)) return true;
-                    CommandUtils.executeCommand(taskManager, applicableCommand, paperCommandSender, args);
+                    if (!commandUtils.performsChecks(false, applicableCommand, paperCommandSender, args)) return true;
+                    commandUtils.executeCommand(taskManager, applicableCommand, paperCommandSender, args);
                     return true;
                 }
 
                 if (!targetableCommand.isTargetable(paperCommandSender, args)) {
-                    if (!CommandUtils.performsChecks(false, applicableCommand, paperCommandSender, args)) return true;
-                    CommandUtils.executeCommand(taskManager, applicableCommand, paperCommandSender, args);
+                    if (!commandUtils.performsChecks(false, applicableCommand, paperCommandSender, args)) return true;
+                    commandUtils.executeCommand(taskManager, applicableCommand, paperCommandSender, args);
                     return true;
                 }
 
@@ -72,17 +101,15 @@ public class PaperCommandManager implements CommandManager {
                 String[] targetArgs = targetableCommand.getTargetArgs(paperCommandSender, args);
 
                 targetableCommand.setExecutedAsTarget(true);
-                CommandUtils.executeCommand(taskManager, targetableCommand, targetPaperCommandSender, targetArgs);
+                commandUtils.executeCommand(taskManager, targetableCommand, targetPaperCommandSender, targetArgs);
                 paperCommandSender.sendMessage(targetableCommand.getExecutedToTargetMessage(targetUsername));
                 return true;
             }
 
             @Override
             public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-                Command applicableCommand = CommandUtils.getApplicableCommand(command, args);
+                Command applicableCommand = commandUtils.getApplicableCommand(command, args);
                 PaperCommandSender paperCommandSender = new PaperCommandSender(sender);
-
-                if (!CommandUtils.performsChecks(true, applicableCommand, paperCommandSender, args)) return new ArrayList<>();
 
                 return applicableCommand.onTabComplete(paperCommandSender, args);
             }
@@ -94,4 +121,5 @@ public class PaperCommandManager implements CommandManager {
 
         Bukkit.getCommandMap().register(plugin.getName(), bukkitCommand);
     }
+
 }

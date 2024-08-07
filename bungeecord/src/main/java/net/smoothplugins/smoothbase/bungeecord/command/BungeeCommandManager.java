@@ -21,17 +21,56 @@ public class BungeeCommandManager implements CommandManager {
     private final ProxyServer server;
     private final Plugin plugin;
     private final TaskManager taskManager;
+    private final CommandUtils commandUtils;
 
     /**
      * Creates a new BungeeCommandManager.
      *
-     * @param server The ProxyServer instance.
      * @param plugin The Plugin instance.
+     * @param taskManager The TaskManager instance.
+     * @param commandUtils The CommandUtils instance.
      */
-    public BungeeCommandManager(@NotNull ProxyServer server, @NotNull Plugin plugin) {
-        this.server = server;
+    public BungeeCommandManager(@NotNull Plugin plugin, @NotNull TaskManager taskManager, @NotNull CommandUtils commandUtils) {
+        this.server = plugin.getProxy();
         this.plugin = plugin;
-        this.taskManager = new BungeeTaskManager(server, plugin);
+        this.taskManager = taskManager;
+        this.commandUtils = commandUtils;
+    }
+
+    /**
+     * Gets the ProxyServer instance.
+     *
+     * @return The ProxyServer instance.
+     */
+    public ProxyServer getServer() {
+        return server;
+    }
+
+    /**
+     * Gets the Plugin instance.
+     *
+     * @return The Plugin instance.
+     */
+    public Plugin getPlugin() {
+        return plugin;
+    }
+
+    /**
+     * Gets the TaskManager instance.
+     *
+     * @return The TaskManager instance.
+     */
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    /**
+     * Gets the CommandUtils instance.
+     *
+     * @return The CommandUtils instance.
+     */
+    public CommandUtils getCommandUtils() {
+        return commandUtils;
     }
 
     @Override
@@ -40,18 +79,18 @@ public class BungeeCommandManager implements CommandManager {
                 command.getPermission(), command.getAliases().toArray(new String[0])) {
             @Override
             public void execute(CommandSender commandSender, String[] args) {
-                Command applicableCommand = CommandUtils.getApplicableCommand(command, args);
+                Command applicableCommand = commandUtils.getApplicableCommand(command, args);
                 BungeeCommandSender bungeeCommandSender = new BungeeCommandSender(commandSender, plugin);
 
                 if (!(applicableCommand instanceof TargetableCommand targetableCommand)) {
-                    if (!CommandUtils.performsChecks(false, applicableCommand, bungeeCommandSender, args)) return;
-                    CommandUtils.executeCommand(taskManager, applicableCommand, bungeeCommandSender, args);
+                    if (!commandUtils.performsChecks(false, applicableCommand, bungeeCommandSender, args)) return;
+                    commandUtils.executeCommand(taskManager, applicableCommand, bungeeCommandSender, args);
                     return;
                 }
 
                 if (!targetableCommand.isTargetable(bungeeCommandSender, args)) {
-                    if (!CommandUtils.performsChecks(false, applicableCommand, bungeeCommandSender, args)) return;
-                    CommandUtils.executeCommand(taskManager, applicableCommand, bungeeCommandSender, args);
+                    if (!commandUtils.performsChecks(false, applicableCommand, bungeeCommandSender, args)) return;
+                    commandUtils.executeCommand(taskManager, applicableCommand, bungeeCommandSender, args);
                     return;
                 }
 
@@ -71,16 +110,14 @@ public class BungeeCommandManager implements CommandManager {
                 String[] targetArgs = targetableCommand.getTargetArgs(bungeeCommandSender, args);
 
                 targetableCommand.setExecutedAsTarget(true);
-                CommandUtils.executeCommand(taskManager, targetableCommand, targetBungeeCommandSender, targetArgs);
+                commandUtils.executeCommand(taskManager, targetableCommand, targetBungeeCommandSender, targetArgs);
                 bungeeCommandSender.sendMessage(targetableCommand.getExecutedToTargetMessage(targetUsername));
             }
 
             @Override
             public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-                Command applicableCommand = CommandUtils.getApplicableCommand(command, args);
+                Command applicableCommand = commandUtils.getApplicableCommand(command, args);
                 BungeeCommandSender bungeeCommandSender = new BungeeCommandSender(sender, plugin);
-
-                if (!CommandUtils.performsChecks(true, applicableCommand, bungeeCommandSender, args)) return new ArrayList<>();
 
                 return applicableCommand.onTabComplete(bungeeCommandSender, args);
             }

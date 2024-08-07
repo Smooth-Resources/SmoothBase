@@ -1,9 +1,12 @@
 package net.smoothplugins.smoothbase.common.command;
 
+import net.smoothplugins.smoothbase.common.placeholder.PlaceholderBuilder;
+import net.smoothplugins.smoothbase.common.placeholder.PlaceholderReplacer;
 import net.smoothplugins.smoothbase.common.task.TaskManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,7 +22,7 @@ public class CommandUtils {
      * @return The applicable command.
      */
     @NotNull
-    public static Command getApplicableCommand(@NotNull Command mainCommand, @NotNull String[] args) {
+    public Command getApplicableCommand(@NotNull Command mainCommand, @NotNull String[] args) {
         if (args.length == 0) {
             return mainCommand;
         }
@@ -48,7 +51,7 @@ public class CommandUtils {
      * @param args     The arguments provided by the sender.
      * @return true if all checks pass, false otherwise.
      */
-    public static boolean performsChecks(boolean silent, @NotNull Command command, @NotNull CommandSender sender, @NotNull String[] args) {
+    public boolean performsChecks(boolean silent, @NotNull Command command, @NotNull CommandSender sender, @NotNull String[] args) {
         if (command.mustBePlayer() && !sender.isPlayer()) {
             if (!silent) {
                 sender.sendMessage(command.getNotPlayerErrorMessage());
@@ -84,7 +87,7 @@ public class CommandUtils {
      * @param sender      The sender of the command.
      * @param args        The arguments provided by the sender.
      */
-    public static void executeCommand(TaskManager taskManager, @NotNull Command command, @NotNull CommandSender sender, @NotNull String[] args) {
+    public void executeCommand(TaskManager taskManager, @NotNull Command command, @NotNull CommandSender sender, @NotNull String[] args) {
         if (command.executeAsync()) {
             taskManager.runTaskAsync(() -> command.onCommand(sender, args));
         } else {
@@ -99,7 +102,7 @@ public class CommandUtils {
      * @return A new array of arguments with the first argument removed.
      */
     @NotNull
-    private static String[] removeFirstArg(@NotNull String[] args) {
+    private String[] removeFirstArg(@NotNull String[] args) {
         String[] newArgs = new String[args.length - 1];
         System.arraycopy(args, 1, newArgs, 0, args.length - 1);
         return newArgs;

@@ -20,16 +20,46 @@ public class VelocityCommandManager implements CommandManager {
 
     private final ProxyServer server;
     private final TaskManager taskManager;
+    private final CommandUtils commandUtils;
 
     /**
      * Creates a new VelocityCommandManager.
      *
      * @param server      The ProxyServer instance.
      * @param taskManager The TaskManager instance.
+     * @param commandUtils The CommandUtils instance.
      */
-    public VelocityCommandManager(@NotNull ProxyServer server, @NotNull TaskManager taskManager) {
+    public VelocityCommandManager(@NotNull ProxyServer server, @NotNull TaskManager taskManager, @NotNull CommandUtils commandUtils) {
         this.server = server;
         this.taskManager = taskManager;
+        this.commandUtils = commandUtils;
+    }
+
+    /**
+     * Gets the ProxyServer instance.
+     *
+     * @return The ProxyServer instance.
+     */
+    public ProxyServer getServer() {
+        return server;
+    }
+
+    /**
+     * Gets the TaskManager instance.
+     *
+     * @return The TaskManager instance.
+     */
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    /**
+     * Gets the CommandUtils instance.
+     *
+     * @return The CommandUtils instance.
+     */
+    public CommandUtils getCommandUtils() {
+        return commandUtils;
     }
 
     @Override
@@ -40,18 +70,18 @@ public class VelocityCommandManager implements CommandManager {
                 CommandSource source = invocation.source();
                 String[] args = invocation.arguments();
 
-                Command applicableCommand = CommandUtils.getApplicableCommand(command, args);
+                Command applicableCommand = commandUtils.getApplicableCommand(command, args);
                 VelocityCommandSender velocityCommandSender = new VelocityCommandSender(source);
 
                 if (!(applicableCommand instanceof TargetableCommand targetableCommand)) {
-                    if (!CommandUtils.performsChecks(false, applicableCommand, velocityCommandSender, args)) return;
-                    CommandUtils.executeCommand(taskManager, applicableCommand, velocityCommandSender, args);
+                    if (!commandUtils.performsChecks(false, applicableCommand, velocityCommandSender, args)) return;
+                    commandUtils.executeCommand(taskManager, applicableCommand, velocityCommandSender, args);
                     return;
                 }
 
                 if (!targetableCommand.isTargetable(velocityCommandSender, args)) {
-                    if (!CommandUtils.performsChecks(false, applicableCommand, velocityCommandSender, args)) return;
-                    CommandUtils.executeCommand(taskManager, applicableCommand, velocityCommandSender, args);
+                    if (!commandUtils.performsChecks(false, applicableCommand, velocityCommandSender, args)) return;
+                    commandUtils.executeCommand(taskManager, applicableCommand, velocityCommandSender, args);
                     return;
                 }
 
@@ -71,7 +101,7 @@ public class VelocityCommandManager implements CommandManager {
                 String[] targetArgs = targetableCommand.getTargetArgs(velocityCommandSender, args);
 
                 targetableCommand.setExecutedAsTarget(true);
-                CommandUtils.executeCommand(taskManager, targetableCommand, targetVelocityCommandSender, targetArgs);
+                commandUtils.executeCommand(taskManager, targetableCommand, targetVelocityCommandSender, targetArgs);
                 velocityCommandSender.sendMessage(targetableCommand.getExecutedToTargetMessage(targetUsername));
             }
 
@@ -80,10 +110,8 @@ public class VelocityCommandManager implements CommandManager {
                 CommandSource source = invocation.source();
                 String[] args = invocation.arguments();
 
-                Command applicableCommand = CommandUtils.getApplicableCommand(command, args);
+                Command applicableCommand = commandUtils.getApplicableCommand(command, args);
                 VelocityCommandSender velocityCommandSender = new VelocityCommandSender(source);
-
-                if (!CommandUtils.performsChecks(true, applicableCommand, velocityCommandSender, args)) return new ArrayList<>();
 
                 return applicableCommand.onTabComplete(velocityCommandSender, args);
             }
