@@ -90,7 +90,9 @@ public class RedisMessenger implements Messenger {
 
     @Override
     public void send(@NotNull Conversation conversation) {
+        System.out.println("Sending conversation");
         if (conversation.getType() == Conversation.Type.REQUEST) {
+            System.out.println("Conversation is a request with timeout: " + conversation.getCallback().getTimeout());
             conversationCallbacks.put(conversation.getConversationUUID(), conversation.getCallback());
             try (Jedis jedis = getJedis()) {
                 jedis.publish(channel, serializer.serialize(conversation));
@@ -99,34 +101,66 @@ public class RedisMessenger implements Messenger {
             taskManager.runTaskLaterAsync(() -> {
                 if (!conversationCallbacks.containsKey(conversation.getConversationUUID())) return;
 
+                System.out.println("Conversation timeout");
                 ConversationCallback callback = conversationCallbacks.get(conversation.getConversationUUID());
                 conversationCallbacks.remove(conversation.getConversationUUID());
                 callback.onTimeout();
             }, conversation.getCallback().getTimeout());
         } else {
+            System.out.println("Conversation is a response");
             // This is the response of a previous request
             try (Jedis jedis = getJedis()) {
+                System.out.println("1");
                 jedis.publish(channel, serializer.serialize(conversation));
+                System.out.println("2");
             }
         }
     }
 
     @Override
     public void onMessage(@NotNull Message message) {
-        Object object = new Gson().fromJson(message.getJson(), message.getClazz());
-        interceptorManager.intercept(object);
+        System.out.println("Received message");
+        try {
+            Object object = new Gson().fromJson(message.getJson(), message.getClazz());
+            interceptorManager.intercept(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onMessage(@NotNull Conversation conversation) {
-        Object object = new Gson().fromJson(conversation.getJson(), conversation.getClazz());
+        System.out.println("Received conversation");
+        System.out.println("1");
+        System.out.println("Trying to convert json: " + conversation.getJson());
+        System.out.println("Into class: " + conversation.getClazz());
+        Object object;
+        try {
+            if (conversation.getClazz().toString().contains("UpdatedUserResponse")) {
+                System.out.println("1.1");
+                object = new Gson().fromJson(conversation.getJson(), conversation.getClazz());
+                System.out.println("1.2");
+            } else {
+                object = new Gson().fromJson(conversation.getJson(), conversation.getClazz());
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to convert json to class: " + e);
+            e.printStackTrace();
+            return;
+        }
+
+        System.out.println("2");
 
         if (conversation.getType() == Conversation.Type.REQUEST) {
+            System.out.println("Conversation is a request");
             interceptorManager.intercept(object, conversation.getConversationUUID());
         } else {
+            System.out.println("Conversation is a response");
             // This is the response of a previous request
+            System.out.println("Conversation uuid: " + conversation.getConversationUUID());
             if (!conversationCallbacks.containsKey(conversation.getConversationUUID())) return;
 
+            System.out.println("Conversation has a callback");
             ConversationCallback callback = conversationCallbacks.get(conversation.getConversationUUID());
             conversationCallbacks.remove(conversation.getConversationUUID());
             callback.onSuccess(object);
@@ -174,9 +208,15 @@ public class RedisMessenger implements Messenger {
 
         @Override
         public void onMessage(String channel, String message) {
+            System.out.println("Received: " + message);
             if (channel.equals(RedisMessenger.this.channel)) {
                 Conversation conversation = serializer.deserialize(message, Conversation.class);
-                if (conversation != null) {
+                if (conversation == null) {
+                    logger.warning("Received invalid message (channel: " + channel + "): " + message);
+                    return;
+                }
+
+                if (conversation.getType() != null) { // If the message is not a conversation, the conversation type will be null.
                     RedisMessenger.this.onMessage(conversation);
                 } else {
                     Message finalMessage = serializer.deserialize(message, Message.class);

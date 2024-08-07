@@ -47,7 +47,9 @@ public abstract class Menu {
      *
      * @param event The inventory close event.
      */
-    public abstract void onClose(InventoryCloseEvent event);
+    public void onClose(InventoryCloseEvent event) {
+        // Most of the time not needed. Override if needed.
+    }
 
     /**
      * Opens the menu for the player.

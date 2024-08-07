@@ -14,7 +14,7 @@ public class Conversation extends Message {
     private final ConversationCallback callback;
     private final Type type;
 
-    private Conversation(Class<?> clazz, String json, UUID conversationUUID, ConversationCallback callback, Type type) {
+    public Conversation(Class<?> clazz, String json, UUID conversationUUID, ConversationCallback callback, Type type) {
         super(clazz, json);
         this.conversationUUID = conversationUUID;
         this.callback = callback;

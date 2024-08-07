@@ -3,6 +3,7 @@ package net.smoothplugins.smoothbase.common.serializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.kyori.adventure.text.Component;
+import net.smoothplugins.smoothbase.common.serializer.adapter.ClassAdapter;
 import net.smoothplugins.smoothbase.common.serializer.adapter.ComponentAdapter;
 import net.smoothplugins.smoothbase.common.serializer.adapter.LocalDateAdapter;
 import net.smoothplugins.smoothbase.common.serializer.adapter.LocalDateTimeAdapter;
@@ -74,6 +75,7 @@ public class Serializer {
          */
         @NotNull
         public Builder registerDefaultAdapters() {
+            registerTypeAdapter(Class.class, new ClassAdapter());
             registerTypeAdapter(Component.class, new ComponentAdapter());
             registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
             registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());

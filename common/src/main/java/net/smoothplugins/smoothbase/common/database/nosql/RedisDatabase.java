@@ -63,6 +63,23 @@ public class RedisDatabase extends NoSQLDatabase {
     }
 
     /**
+     * Checks if a key has a TTL.
+     * @param key The key to check.
+     * @return True if the key has a TTL, false otherwise.
+     */
+    public boolean hasTTL(@NotNull String key) {
+        try (Jedis jedis = getJedis()) {
+            return jedis.ttl(prefix + key) != -1;
+        }
+    }
+
+    public long getTTL(@NotNull String key) {
+        try (Jedis jedis = getJedis()) {
+            return jedis.ttl(prefix + key);
+        }
+    }
+
+    /**
      * Gets all values for a key with a specific prefix.
      *
      * @param prefix The prefix to search for (it will be appended with a wildcard) (prefix can be empty).
