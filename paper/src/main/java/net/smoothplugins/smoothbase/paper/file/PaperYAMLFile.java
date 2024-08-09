@@ -9,6 +9,8 @@ import net.smoothplugins.smoothbase.common.file.YAMLFile;
 import net.smoothplugins.smoothbase.common.placeholder.PlaceholderReplacer;
 import net.smoothplugins.smoothbase.paper.head.SkullCreator;
 import net.smoothplugins.smoothbase.paper.menu.button.Button;
+import net.smoothplugins.smoothbase.paper.menu.button.ClickableButton;
+import net.smoothplugins.smoothbase.paper.menu.event.PlayerClickButtonEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * Utility class for handling YAML configuration files in a Paper environment.
@@ -163,5 +166,16 @@ public class PaperYAMLFile extends YAMLFile {
         }
 
         return new Button(item, slots);
+    }
+
+    public ClickableButton getClickableButton(Consumer<PlayerClickButtonEvent> onClick, @NotNull Object... path) {
+        return getClickableButton(new HashMap<>(), onClick, path);
+    }
+
+    public ClickableButton getClickableButton(@NotNull HashMap<String, String> placeholders,
+                                              @NotNull Consumer<PlayerClickButtonEvent> onClick,
+                                              @NotNull Object... path) {
+        Button button = getButton(placeholders, path);
+        return new ClickableButton(button.getItemStack(), button.getSlots().get(0), onClick);
     }
 }
