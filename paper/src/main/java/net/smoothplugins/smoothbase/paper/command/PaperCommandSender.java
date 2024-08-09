@@ -21,6 +21,20 @@ public class PaperCommandSender implements net.smoothplugins.smoothbase.common.c
         this.sender = sender;
     }
 
+    /**
+     * Gets the Player instance of the sender.
+     *
+     * @return The Player instance.
+     * @throws IllegalStateException If the sender is not a player.
+     */
+    public Player getPlayer() {
+        if (!isPlayer()) {
+            throw new IllegalStateException("Sender is not a player.");
+        }
+
+        return (Player) sender;
+    }
+
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return sender.hasPermission(permission);
