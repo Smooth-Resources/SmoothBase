@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Utility class for handling YAML configuration files in a Paper environment.
@@ -132,26 +133,38 @@ public class PaperYAMLFile extends YAMLFile {
      */
     @NotNull
     public Button getButton(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
-        Material material = getMaterial(path, "material");
+        List<String> pathList = new java.util.ArrayList<>(Stream.of(path).map(Object::toString).toList());
+
+        pathList.add("material");
+        Material material = getMaterial(pathList.toArray());
+
         if (material == null) {
-            throw new IllegalArgumentException(getString(path, "material") + " is not a valid material");
+            throw new IllegalArgumentException(getString(pathList.toArray()) + " is not a valid material");
         }
+
+        pathList.remove(pathList.size() - 1);
 
         ItemStack item = new ItemStack(material);
 
-        if (item.getType() == Material.PLAYER_HEAD && getNode(path, "base64").getString() != null) {
-            item = SkullCreator.itemFromBase64(getString(path, "base64"));
+        pathList.add("base64");
+        if (item.getType() == Material.PLAYER_HEAD && getNode(pathList.toArray()).getString() != null) {
+            item = SkullCreator.itemFromBase64(getString(pathList));
 
             if (item == null) {
-                throw new IllegalArgumentException("Invalid base64 string: " + getString(path, "base64"));
+                throw new IllegalArgumentException("Invalid base64 string: " + getString(pathList));
             }
         }
+        pathList.remove(pathList.size() - 1);
 
-        Component name = getComponent(placeholders, path, "name");
+        pathList.add("name");
+        Component name = getComponent(placeholders, pathList.toArray());
         name = ComponentUtils.removeDecorations(name, TextDecoration.ITALIC);
+        pathList.remove(pathList.size() - 1);
 
-        List<Component> lore = getComponentList(placeholders, path, "lore");
+        pathList.add("lore");
+        List<Component> lore = getComponentList(placeholders, pathList.toArray());
         lore = ComponentUtils.removeDecorations(lore, TextDecoration.ITALIC);
+        pathList.remove(pathList.size() - 1);
 
         Component finalName = name;
         List<Component> finalLore = lore;
@@ -160,9 +173,13 @@ public class PaperYAMLFile extends YAMLFile {
             meta.lore(finalLore);
         });
 
-        List<Integer> slots = getIntegerList(path, "slots");
+
+        pathList.add("slots");
+        List<Integer> slots = getIntegerList(pathList.toArray());
         if (slots.isEmpty()) {
-            slots.add(getInt(path, "slot"));
+            pathList.remove(pathList.size() - 1);
+            pathList.add("slot");
+            slots.add(getInt(pathList.toArray()));
         }
 
         return new Button(item, slots);
