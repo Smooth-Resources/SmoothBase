@@ -79,6 +79,11 @@ public abstract class Menu {
      * @param button The button to set.
      */
     public void setItem(@NotNull Button button) {
+        Button previousButton = getButtonBySlot(button.getSlots().get(0));
+        if (previousButton != null) {
+            removeItem(previousButton);
+        }
+
         items.add(button);
         button.getSlots().forEach(slot -> inventory.setItem(slot, button.getItemStack()));
     }
