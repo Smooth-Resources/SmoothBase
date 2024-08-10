@@ -1,16 +1,17 @@
 package net.smoothplugins.smoothbase.common.serializer.adapter;
 
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class ClassAdapter implements JsonSerializer<Class<?>>, JsonDeserializer<Class<?>> {
+
+    private final List<String> whitelist;
+
+    public ClassAdapter(List<String> whitelist) {
+        this.whitelist = whitelist;
+    }
 
     @Override
     public JsonElement serialize(Class<?> src, Type typeOfSrc, JsonSerializationContext context) {
@@ -21,7 +22,12 @@ public class ClassAdapter implements JsonSerializer<Class<?>>, JsonDeserializer<
     public Class<?> deserialize(JsonElement json, Type typeOfT, com.google.gson.JsonDeserializationContext context)
             throws JsonParseException {
         try {
-            return Class.forName(json.getAsString());
+            String className = json.getAsString();
+            if (!whitelist.contains(className)) {
+                throw new JsonParseException("Class not in whitelist");
+            }
+
+            return Class.forName(className);
         } catch (ClassNotFoundException e) {
             throw new JsonParseException(e);
         }

@@ -8,6 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Specialized Serializer for handling Paper-specific objects such as ItemStack and Location.
  */
@@ -34,8 +36,8 @@ public class PaperSerializer extends Serializer {
          */
         @NotNull
         @Override
-        public Builder registerDefaultAdapters() {
-            super.registerDefaultAdapters();
+        public Builder registerDefaultAdapters(List<String> classWhitelist) {
+            super.registerDefaultAdapters(classWhitelist);
             registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter());
             registerTypeAdapter(Location.class, new LocationAdapter());
             return this;

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Utility class for serializing and deserializing objects using Gson.
@@ -74,8 +75,8 @@ public class Serializer {
          * @return The current Builder instance.
          */
         @NotNull
-        public Builder registerDefaultAdapters() {
-            registerTypeAdapter(Class.class, new ClassAdapter());
+        public Builder registerDefaultAdapters(List<String> classWhitelist) {
+            registerTypeAdapter(Class.class, new ClassAdapter(classWhitelist));
             registerTypeAdapter(Component.class, new ComponentAdapter());
             registerTypeAdapter(LocalDate.class, new LocalDateAdapter());
             registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
