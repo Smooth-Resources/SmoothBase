@@ -189,7 +189,7 @@ public class PaperYAMLFile extends YAMLFile {
         return getClickableButton(new HashMap<>(), onClick, path);
     }
 
-    public ClickableButton getClickableButton(@NotNull HashMap<String, String> placeholders,
+    public ClickableButton getClickableButton(@NotNull HashMap<String, List<String>> placeholders,
                                               @NotNull Consumer<PlayerClickButtonEvent> onClick,
                                               @NotNull Object... path) {
         Button button = getButton(placeholders, path);
