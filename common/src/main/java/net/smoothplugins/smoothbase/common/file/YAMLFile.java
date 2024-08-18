@@ -144,7 +144,7 @@ public class YAMLFile {
      * @return The string value at the specified path with placeholders replaced.
      */
     @NotNull
-    public String getString(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public String getString(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         String text = getMainNode().node(path).getString();
         if (text == null) {
             return "Path " + Arrays.toString(path) + " not found in " + fileName;
@@ -222,7 +222,7 @@ public class YAMLFile {
      * @return The list of strings at the specified path with placeholders replaced.
      */
     @NotNull
-    public List<String> getStringList(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public List<String> getStringList(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         try {
             List<String> list = getMainNode().node(path).getList(String.class, new ArrayList<>());
             return PlaceholderReplacer.replace(list, placeholders);
@@ -325,7 +325,7 @@ public class YAMLFile {
      * @return The component at the specified path with placeholders replaced.
      */
     @NotNull
-    public Component getComponent(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public Component getComponent(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         return ComponentUtils.toComponent(PlaceholderReplacer.replace(getString(path), placeholders));
     }
 
@@ -348,7 +348,7 @@ public class YAMLFile {
      * @return The list of components at the specified path with placeholders replaced.
      */
     @NotNull
-    public List<Component> getComponentList(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public List<Component> getComponentList(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         List<Component> componentList = new ArrayList<>();
         getStringList(path).forEach(text -> {
             componentList.add(ComponentUtils.toComponent(PlaceholderReplacer.replace(text, placeholders)));

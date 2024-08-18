@@ -58,7 +58,7 @@ public class PaperYAMLFile extends YAMLFile {
      * @return The colored string at the specified path with placeholders replaced.
      */
     @NotNull
-    public String getColoredString(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public String getColoredString(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         String coloredText = ChatColor.translateAlternateColorCodes('&', getString(path));
         return PlaceholderReplacer.replace(coloredText, placeholders);
     }
@@ -82,7 +82,7 @@ public class PaperYAMLFile extends YAMLFile {
      * @return The list of colored strings at the specified path with placeholders replaced.
      */
     @NotNull
-    public List<String> getColoredStringList(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public List<String> getColoredStringList(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         return getStringList(path)
                 .stream()
                 .map(line -> PlaceholderReplacer.replace(ChatColor.translateAlternateColorCodes('&', line), placeholders))
@@ -132,7 +132,7 @@ public class PaperYAMLFile extends YAMLFile {
      * @throws IllegalArgumentException If the material or base64 string is invalid.
      */
     @NotNull
-    public Button getButton(@NotNull HashMap<String, String> placeholders, @NotNull Object... path) {
+    public Button getButton(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         List<String> pathList = new java.util.ArrayList<>(Stream.of(path).map(Object::toString).toList());
 
         pathList.add("material");
