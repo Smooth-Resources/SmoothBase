@@ -27,12 +27,6 @@ public class InventoryClickListener implements Listener {
         Menu menu = OpenMenuManager.getMenu(player);
         if (menu == null) return;
 
-        event.setCancelled(true);
-
-        int clickedSlot = event.getSlot();
-        Button button = menu.getButtonBySlot(clickedSlot);
-
-        if (!(button instanceof ClickableButton clickableButton)) return;
-        clickableButton.onClick(new PlayerClickButtonEvent(menu, clickableButton, player, event));
+        menu.onClick(event);
     }
 }

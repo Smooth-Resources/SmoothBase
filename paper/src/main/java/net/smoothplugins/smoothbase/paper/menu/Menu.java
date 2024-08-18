@@ -1,8 +1,11 @@
 package net.smoothplugins.smoothbase.paper.menu;
 
 import net.smoothplugins.smoothbase.paper.menu.button.Button;
+import net.smoothplugins.smoothbase.paper.menu.button.ClickableButton;
+import net.smoothplugins.smoothbase.paper.menu.event.PlayerClickButtonEvent;
 import net.smoothplugins.smoothbase.paper.menu.manager.OpenMenuManager;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +52,21 @@ public abstract class Menu {
      */
     public void onClose(InventoryCloseEvent event) {
         // Most of the time not needed. Override if needed.
+    }
+
+    /**
+     * Handles the menu click event.
+     *
+     * @param event The inventory click event.
+     */
+    public void onClick(InventoryClickEvent event) {
+        event.setCancelled(true);
+
+        int clickedSlot = event.getSlot();
+        Button button = getButtonBySlot(clickedSlot);
+
+        if (!(button instanceof ClickableButton clickableButton)) return;
+        clickableButton.onClick(new PlayerClickButtonEvent(this, clickableButton, player, event));
     }
 
     /**
