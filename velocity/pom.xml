@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.smoothplugins</groupId>
         <artifactId>smoothbase</artifactId>
-        <version>v2.0.0</version>
+        <version>v2.3.0</version>
     </parent>
 
     <artifactId>smoothbase-velocity</artifactId>
