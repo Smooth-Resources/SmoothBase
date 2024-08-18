@@ -6,10 +6,11 @@
     <parent>
         <groupId>net.smoothplugins</groupId>
         <artifactId>smoothbase</artifactId>
-        <version>v2.3.0</version>
+        <version>v2.0.0</version>
     </parent>
 
     <artifactId>smoothbase-bungeecord</artifactId>
+    <version>v2.3.1</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -54,7 +55,7 @@
         <dependency>
             <groupId>net.smoothplugins</groupId>
             <artifactId>smoothbase-common</artifactId>
-            <version>v2.0.0</version>
+            <version>v2.3.1</version>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>
