@@ -350,8 +350,8 @@ public class YAMLFile {
     @NotNull
     public List<Component> getComponentList(@NotNull HashMap<String, List<String>> placeholders, @NotNull Object... path) {
         List<Component> componentList = new ArrayList<>();
-        getStringList(path).forEach(text -> {
-            componentList.add(ComponentUtils.toComponent(PlaceholderReplacer.replace(text, placeholders)));
+        getStringList(placeholders, path).forEach(text -> {
+            componentList.add(ComponentUtils.toComponent(text));
         });
 
         return componentList;
