@@ -70,6 +70,15 @@ public class Serializer {
         }
 
         /**
+         * Returns the GsonBuilder instance used to configure the Gson instance.
+         *
+         * @return The GsonBuilder instance.
+         */
+        public GsonBuilder getGsonBuilder() {
+            return gsonBuilder;
+        }
+
+        /**
          * Registers default type adapters for common types.
          *
          * @return The current Builder instance.
