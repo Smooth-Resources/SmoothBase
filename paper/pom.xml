@@ -29,7 +29,7 @@
         <dependency>
             <groupId>net.smoothplugins</groupId>
             <artifactId>smoothbase-common</artifactId>
-            <version>v2.3.1</version>
+            <version>v2.4.0</version>
         </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
