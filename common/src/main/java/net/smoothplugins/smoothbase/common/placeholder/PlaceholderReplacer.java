@@ -59,8 +59,8 @@ public class PlaceholderReplacer {
         List<String> result = new ArrayList<>();
 
         for (String line : messages) {
-            boolean replaced = false;
 
+            boolean add = true;
             for (Map.Entry<String, List<String>> entry : placeholders.entrySet()) {
                 String placeholder = entry.getKey();
                 List<String> values = entry.getValue();
@@ -68,19 +68,17 @@ public class PlaceholderReplacer {
                 if (!line.contains(placeholder)) continue;
 
                 if (values.size() == 1) {
-                    replaced = true;
-                    result.add(line.replace(placeholder, values.get(0)));
+                    line = line.replace(placeholder, values.get(0));
                     continue;
                 }
 
-                replaced = true;
+                add = false;
                 for (String value : values) {
-                    String replacedLine = line.replace(placeholder, value);
-                    result.add(replacedLine);
+                    result.add(line.replace(placeholder, value));
                 }
             }
 
-            if (!replaced) {
+            if (add) {
                 result.add(line);
             }
         }
