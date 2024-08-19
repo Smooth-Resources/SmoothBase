@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>smoothbase-bungeecord</artifactId>
-    <version>v2.3.1</version>
+    <version>v2.4.0</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
