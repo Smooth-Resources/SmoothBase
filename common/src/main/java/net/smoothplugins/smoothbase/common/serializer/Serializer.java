@@ -110,6 +110,17 @@ public class Serializer {
         }
 
         /**
+         * Enables serialization of complex map keys (e.g. objects).
+         *
+         * @return The current Builder instance.
+         */
+        @NotNull
+        public Builder enableComplexMapKeySerialization() {
+            gsonBuilder.enableComplexMapKeySerialization();
+            return this;
+        }
+
+        /**
          * Builds and returns a Serializer instance with the configured Gson instance.
          *
          * @return The created Serializer instance.
