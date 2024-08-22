@@ -23,6 +23,20 @@ public class VelocityCommandSender implements CommandSender {
         this.source = source;
     }
 
+    /**
+     * Gets the Player instance of the sender.
+     *
+     * @return The Player instance.
+     * @throws IllegalStateException If the sender is not a player.
+     */
+    public Player getPlayer() {
+        if (!isPlayer()) {
+            throw new IllegalStateException("Sender is not a player.");
+        }
+
+        return (Player) source;
+    }
+
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return source.hasPermission(permission);

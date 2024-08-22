@@ -27,6 +27,20 @@ public class BungeeCommandSender implements CommandSender {
         this.plugin = plugin;
     }
 
+    /**
+     * Gets the Player instance of the sender.
+     *
+     * @return The Player instance.
+     * @throws IllegalStateException If the sender is not a player.
+     */
+    public ProxiedPlayer getPlayer() {
+        if (!isPlayer()) {
+            throw new IllegalStateException("Sender is not a player.");
+        }
+
+        return (ProxiedPlayer) sender;
+    }
+
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return sender.hasPermission(permission);
