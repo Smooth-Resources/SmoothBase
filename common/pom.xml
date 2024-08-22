@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>smoothbase-common</artifactId>
-    <version>v2.5.0</version>
+    <version>v2.5.1</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
