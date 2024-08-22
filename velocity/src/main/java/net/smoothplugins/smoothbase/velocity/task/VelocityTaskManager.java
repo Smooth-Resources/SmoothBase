@@ -1,6 +1,5 @@
 package net.smoothplugins.smoothbase.velocity.task;
 
-import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.smoothplugins.smoothbase.common.task.TaskManager;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 public class VelocityTaskManager extends TaskManager {
 
     private final ProxyServer server;
-    private final Plugin plugin;
+    private final Object plugin;
+
 
     /**
      * Creates a new VelocityTaskManager.
@@ -19,7 +19,7 @@ public class VelocityTaskManager extends TaskManager {
      * @param server The ProxyServer instance.
      * @param plugin The plugin instance.
      */
-    public VelocityTaskManager(@NotNull ProxyServer server, @NotNull Plugin plugin) {
+    public VelocityTaskManager(@NotNull ProxyServer server, @NotNull Object plugin) {
         this.server = server;
         this.plugin = plugin;
     }
