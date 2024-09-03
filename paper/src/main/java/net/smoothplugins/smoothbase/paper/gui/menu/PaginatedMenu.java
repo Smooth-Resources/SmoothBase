@@ -1,4 +1,4 @@
-package net.smoothplugins.smoothbase.paper.menu;
+package net.smoothplugins.smoothbase.paper.gui.menu;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

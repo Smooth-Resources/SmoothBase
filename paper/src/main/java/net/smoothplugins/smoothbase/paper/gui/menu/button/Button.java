@@ -1,4 +1,4 @@
-package net.smoothplugins.smoothbase.paper.menu.button;
+package net.smoothplugins.smoothbase.paper.gui.menu.button;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

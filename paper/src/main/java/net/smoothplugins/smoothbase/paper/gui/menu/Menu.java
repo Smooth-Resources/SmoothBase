@@ -1,9 +1,10 @@
-package net.smoothplugins.smoothbase.paper.menu;
+package net.smoothplugins.smoothbase.paper.gui.menu;
 
-import net.smoothplugins.smoothbase.paper.menu.button.Button;
-import net.smoothplugins.smoothbase.paper.menu.button.ClickableButton;
-import net.smoothplugins.smoothbase.paper.menu.event.PlayerClickButtonEvent;
-import net.smoothplugins.smoothbase.paper.menu.manager.OpenMenuManager;
+import net.smoothplugins.smoothbase.paper.gui.GUI;
+import net.smoothplugins.smoothbase.paper.gui.menu.button.ClickableButton;
+import net.smoothplugins.smoothbase.paper.gui.menu.manager.OpenMenuManager;
+import net.smoothplugins.smoothbase.paper.gui.menu.button.Button;
+import net.smoothplugins.smoothbase.paper.gui.menu.event.PlayerClickButtonEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -18,9 +19,8 @@ import java.util.List;
 /**
  * Represents a menu in the game.
  */
-public abstract class Menu {
+public abstract class Menu extends GUI {
 
-    private final Player player;
     private Inventory inventory;
     private final List<Button> items;
     private ItemStack backgroundItem;
@@ -31,7 +31,7 @@ public abstract class Menu {
      * @param player The player.
      */
     public Menu(@NotNull Player player) {
-        this.player = player;
+        super(player);
         this.items = new ArrayList<>();
     }
 
@@ -66,12 +66,13 @@ public abstract class Menu {
         Button button = getButtonBySlot(clickedSlot);
 
         if (!(button instanceof ClickableButton clickableButton)) return;
-        clickableButton.onClick(new PlayerClickButtonEvent(this, clickableButton, player, event));
+        clickableButton.onClick(new PlayerClickButtonEvent(this, clickableButton, getPlayer(), event));
     }
 
     /**
      * Opens the menu for the player.
      */
+    @Override
     public void open() {
         createInventory();
         if (inventory == null) {
@@ -86,8 +87,8 @@ public abstract class Menu {
             }
         }
 
-        if (player.openInventory(inventory) != null) {
-            OpenMenuManager.addPlayer(player, this);
+        if (getPlayer().openInventory(inventory) != null) {
+            OpenMenuManager.addPlayer(getPlayer(), this);
         }
     }
 
@@ -147,16 +148,6 @@ public abstract class Menu {
     @Nullable
     public ItemStack getBackgroundItem() {
         return backgroundItem;
-    }
-
-    /**
-     * Gets the player for whom the menu is created.
-     *
-     * @return The player.
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**

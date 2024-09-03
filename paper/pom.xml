@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>smoothbase-paper</artifactId>
-    <version>v2.5.2</version>
+    <version>v2.6.0</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -22,6 +22,10 @@
         <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>opencollab-snapshot</id>
+            <url>https://repo.opencollab.dev/main/</url>
         </repository>
     </repositories>
 
@@ -47,6 +51,12 @@
             <groupId>org.spongepowered</groupId>
             <artifactId>configurate-yaml</artifactId>
             <version>4.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geysermc.floodgate</groupId>
+            <artifactId>api</artifactId>
+            <version>2.2.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

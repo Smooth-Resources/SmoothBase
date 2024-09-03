@@ -1,7 +1,7 @@
-package net.smoothplugins.smoothbase.paper.menu.event;
+package net.smoothplugins.smoothbase.paper.gui.menu.event;
 
-import net.smoothplugins.smoothbase.paper.menu.Menu;
-import net.smoothplugins.smoothbase.paper.menu.button.Button;
+import net.smoothplugins.smoothbase.paper.gui.menu.Menu;
+import net.smoothplugins.smoothbase.paper.gui.menu.button.Button;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;

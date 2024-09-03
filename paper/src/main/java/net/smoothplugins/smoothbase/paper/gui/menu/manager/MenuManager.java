@@ -1,7 +1,7 @@
-package net.smoothplugins.smoothbase.paper.menu.manager;
+package net.smoothplugins.smoothbase.paper.gui.menu.manager;
 
-import net.smoothplugins.smoothbase.paper.menu.listener.InventoryClickListener;
-import net.smoothplugins.smoothbase.paper.menu.listener.InventoryCloseListener;
+import net.smoothplugins.smoothbase.paper.gui.menu.listener.InventoryClickListener;
+import net.smoothplugins.smoothbase.paper.gui.menu.listener.InventoryCloseListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;

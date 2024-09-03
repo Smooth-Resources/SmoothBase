@@ -30,6 +30,24 @@ public class RedisDatabase extends NoSQLDatabase {
     }
 
     /**
+     * Gets the Redis connection instance.
+     *
+     * @return The Redis connection instance.
+     */
+    public RedisConnection getConnection() {
+        return connection;
+    }
+
+    /**
+     * Gets the prefix for keys in the Redis database.
+     *
+     * @return The prefix for keys in the Redis database.
+     */
+    public String getPrefix() {
+        return prefix;
+    }
+
+    /**
      * Gets a Jedis instance from the connection pool.
      *
      * @return A Jedis instance.

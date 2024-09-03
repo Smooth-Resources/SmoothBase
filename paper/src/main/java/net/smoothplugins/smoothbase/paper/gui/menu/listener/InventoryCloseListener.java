@@ -1,7 +1,7 @@
-package net.smoothplugins.smoothbase.paper.menu.listener;
+package net.smoothplugins.smoothbase.paper.gui.menu.listener;
 
-import net.smoothplugins.smoothbase.paper.menu.Menu;
-import net.smoothplugins.smoothbase.paper.menu.manager.OpenMenuManager;
+import net.smoothplugins.smoothbase.paper.gui.menu.manager.OpenMenuManager;
+import net.smoothplugins.smoothbase.paper.gui.menu.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
