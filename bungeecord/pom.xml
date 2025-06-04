@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>net.smoothplugins</groupId>
+        <groupId>com.smoothresources</groupId>
         <artifactId>smoothbase</artifactId>
         <version>v2.0.0</version>
     </parent>
@@ -34,7 +34,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>net.kyori.adventure.platform.bungeecord</pattern>
-                                    <shadedPattern>net.smoothplugins.smoothbase.bungeecord.libs.net.kyori.adventure.platform.bungeecord</shadedPattern>
+                                    <shadedPattern>com.smoothresources.smoothbase.bungeecord.libs.net.kyori.adventure.platform.bungeecord</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -53,7 +53,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.smoothplugins</groupId>
+            <groupId>com.smoothresources</groupId>
             <artifactId>smoothbase-common</artifactId>
             <version>v2.5.1</version>
         </dependency>
