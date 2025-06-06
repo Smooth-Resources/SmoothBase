@@ -100,6 +100,14 @@ public class PaperYAMLFile extends YAMLFile {
         return Material.getMaterial(getString(path).toUpperCase(Locale.ROOT));
     }
 
+    @NotNull
+    public List<Material> getMaterialList(@NotNull Object... path) {
+        return getStringList(path)
+                .stream()
+                .map(line -> Material.getMaterial(line.toUpperCase(Locale.ROOT)))
+                .toList();
+    }
+
     /**
      * Gets a sound from the configuration node at the specified path.
      *
