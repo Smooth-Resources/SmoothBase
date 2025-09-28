@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>smoothbase-paper</artifactId>
-    <version>v2.7.0</version>
+    <version>v2.7.1</version>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.smoothresources</groupId>
             <artifactId>smoothbase-common</artifactId>
-            <version>v2.5.1</version>
+            <version>v2.5.2</version>
         </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
