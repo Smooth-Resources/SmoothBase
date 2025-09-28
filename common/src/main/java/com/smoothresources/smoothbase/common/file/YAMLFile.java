@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
@@ -54,7 +55,11 @@ public class YAMLFile {
             }
         }
 
-        yamlConfigurationLoader = YamlConfigurationLoader.builder().path(file.toPath()).build();
+        yamlConfigurationLoader = YamlConfigurationLoader
+                .builder()
+                .path(file.toPath())
+                .nodeStyle(NodeStyle.BLOCK)
+                .build();
         try {
             mainNode = yamlConfigurationLoader.load();
         } catch (ConfigurateException e) {
